@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,11 @@ public class UserController {
      * @return
      */
     @GetMapping
-    public Page<User> index(@PageableDefault(size = 2, sort = "name", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<User> index(@SortDefault.SortDefaults({
+            @SortDefault(sort = "name"),
+            @SortDefault(sort = "email", direction = Sort.Direction.DESC),})
+                            @PageableDefault(size = 2)
+                                    Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
