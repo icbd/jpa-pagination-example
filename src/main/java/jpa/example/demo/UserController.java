@@ -3,6 +3,7 @@ package jpa.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,14 @@ public class UserController {
     private UserRepository userRepository;
 
     /**
-     * By default:
-     * page: 0
-     * size: 10
-     * size: {}
+     * Customized by "spring.data.web.pageable."
+     * 但是此处 page size 的默认值由 `@PageableDefault` 注解决定, 不指定的话还是 page: 0, size: 10.
+     * `one-indexed-parameters` 让页数从1开始计算 (0和1都认为是开始的第一页).
      *
      * @return
      */
     @GetMapping
-    public Page<User> index(@PageableDefault Pageable pageable) {
+    public Page<User> index(@PageableDefault(size = 2, sort = "name", direction = Sort.Direction.DESC) Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
